@@ -1,8 +1,8 @@
 import path from "path";
 import sqlite3 from "sqlite3";
 import fs from "fs";
-import { User } from "../utils/User";
-import { isError } from "../utils/utils";
+import { User, isUser } from "../utils/User";
+import { isError, isNumber, isObject } from "../utils/utils";
 sqlite3.verbose();
 
 const dbPath = path.join(process.cwd(), "database.db");
@@ -25,7 +25,8 @@ export type Database = {
     ): void
 }
 
-const fetchAll = async (db: sqlite3.Database,
+const fetchAll = async (
+    db: sqlite3.Database,
     sql: string,
     params: any
 ) => {
@@ -37,7 +38,8 @@ const fetchAll = async (db: sqlite3.Database,
     });
 };
   
-const fetchFirst = async (db: sqlite3.Database,
+const fetchFirst = async (
+    db: sqlite3.Database,
     sql: string,
     params: any
 ) => {
@@ -86,12 +88,15 @@ export const connectToDatabase = (): Database => {
     ): Promise<boolean | Error> => {
         try {
             const row = await fetchFirst(db,
-                `SELECT COUNT(username) AS count FROM Accounts WHERE username = ?`,
+                `SELECT COUNT(username) AS count FROM Accounts WHERE username = ?;`,
                 [username]
             );
-            /// TODO: how tf to use row??
-            // Example? https://www.sqlitetutorial.net/sqlite-nodejs/query/
-            if (row.count > 0) {
+            
+            // Parsing row type to object with count as number
+            if (!isObject(row)) {return new Error("Unknown error!")}
+            if (!("count" in row && isNumber(row.count))) {return new Error("Unknown error!")}
+
+            if (row.count as number > 0) {
                 return true
             }
             return false;
@@ -112,19 +117,16 @@ export const connectToDatabase = (): Database => {
     ): Promise<User | Error> => {
         try {
             const row = await fetchFirst(db,
-                `SELECT * FROM Accounts WHERE username = ?`,
+                `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
+                FROM Accounts
+                WHERE username = ?;`,
                 [username]
             );
-            /// TODO: how tf to use row??
-            // Example? https://www.sqlitetutorial.net/sqlite-nodejs/query/
-            return {
-                id: row.id,
-                username: username,
-                firstName: row.first_name,
-                lastName: row.last_name,
-                password: row.salt_hashed_password,
-                passwordSalt: row.password_salt
-            }
+            
+            if (!isObject(row)) {return new Error("Unknown error!")}
+            if (!isUser(row)) {return new Error("Unknown error!")}
+
+            return row as User
         } catch (err) {
             if (isError(err)) {
                 return err
