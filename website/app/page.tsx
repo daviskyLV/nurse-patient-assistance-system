@@ -1,8 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import './globals.css';
+import { connectToDatabase } from './api/db-connection';
 
 const Home: React.FC = () => {
+    const dbCon = connectToDatabase();
+
     return (
         <div className="container">
             <h1>Assistance Tracking</h1>
