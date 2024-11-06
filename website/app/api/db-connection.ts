@@ -1,8 +1,8 @@
 import path from "path";
 import sqlite3 from "sqlite3";
 import fs from "fs";
-import { User, isUser } from "../utils/User";
-import { isError, isNumber, isObject } from "../utils/utils";
+import { User, isUser } from "../(utils)/User";
+import { isError, isNumber, isObject } from "../(utils)/utilFuncs";
 sqlite3.verbose();
 
 const dbPath = path.join(process.cwd(), "database.db");
@@ -67,7 +67,7 @@ export const connectToDatabase = (): Database => {
     )
 
     const dbDDL = fs.readFileSync(process.cwd() + '/app/database/ddl.sql', 'utf8');
-    db.run(
+    db.exec(
         dbDDL,
         (err: Error | null) => {
             if (err) {
