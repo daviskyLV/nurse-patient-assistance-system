@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import './globals.css';
-import { connectToDatabase } from './api/db-connection';
 
 const Home: React.FC = () => {
     return (
