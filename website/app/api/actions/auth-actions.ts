@@ -2,7 +2,7 @@
 import * as crypto from 'crypto';
 import { connectToDatabase } from '../db-connection';
 import { z } from "zod"
-import { isError } from '@/app/(utils)/utilFuncs';
+import { isError } from '@/app/utils/utilFuncs';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
