@@ -1,6 +1,6 @@
 "use client";
+import { registerUserAction, signupState } from '@/app/api/actions/auth/signup';
 import { ZodErrors } from '@/app/utils/components/ZodErrors';
-import { signupState, registerUserAction } from '@/app/api/actions/auth-actions';
 import React from 'react'
 import { useFormState } from 'react-dom';
 
