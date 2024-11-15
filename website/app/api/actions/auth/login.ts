@@ -1,26 +1,13 @@
 "use server";
-import { connectToDatabase } from '../db-connection';
 import { z } from "zod"
 import { isError } from '@/app/utils/utilFuncs';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { encryptPassword } from '@/app/utils/encryption';
-
-const cookiesConfig = {
-    maxAge: 60 * 60 * 24 * 1, // 1 day
-    path: "/",
-    domain: process.env.HOST ?? "localhost",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-};
+import { createSession } from './session';
+import { connectToDatabase } from "../../db-connection";
 
 
-/// AUTHENTICATION
 export type authenticationState = {
-    auth: {
-        cookie: string,
-        username: string
-    },
     zodErrors: any,
     message: string
 }
@@ -36,10 +23,6 @@ const authInputValidator = z.object({
 
 export async function authenticateUserAction(prevState: authenticationState, formData: FormData) {
     const newState: authenticationState = {
-        auth: {
-            cookie: "",
-            username: ""
-        },
         zodErrors: null,
         message: ""
     }
@@ -100,13 +83,7 @@ export async function authenticateUserAction(prevState: authenticationState, for
 
     // Passwords match
     newState.message = "ok"
-    newState.auth = {
-        cookie: "yay",
-        username: userInfo.username
-    }
 
-    ;(await cookies()).set("auth", "yay", cookiesConfig)
-    redirect("/requests"); // Going to homepage
-
-    return {...prevState, ...newState}
+    createSession(userInfo.username)
+    redirect("/"); // Going to homepage
 }
