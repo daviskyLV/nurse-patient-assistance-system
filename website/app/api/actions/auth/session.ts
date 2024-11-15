@@ -39,6 +39,17 @@ export function decryptJWT(session: string ): SessionPayload {
     }
 }
 
+/**
+ * Delete the session cookie
+ */
+export async function logoutSession() {
+    (await cookies()).delete("session")
+}
+
+/**
+ * Creates and sets a session cookie of the user
+ * @param username The username for which to create a session cookie
+ */
 export async function createSession(username: string) {
     const expiresAt = new Date(Date.now() + cookiesConfig.maxAge*1000)
     const encryptedJWT = encryptJWT({username, expiresAt})
