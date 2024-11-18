@@ -1,8 +1,8 @@
 import path from "path";
 import sqlite3 from "sqlite3";
 import fs from "fs";
-import { User, isUser } from "../(utils)/User";
-import { isError, isNumber, isObject } from "../(utils)/utilFuncs";
+import { User, isUser } from "../utils/User";
+import { isError, isNumber, isObject } from "../utils/utilFuncs";
 sqlite3.verbose();
 
 const dbPath = path.join(process.cwd(), "database.db");

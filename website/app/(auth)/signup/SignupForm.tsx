@@ -1,12 +1,22 @@
 "use client";
-import { ZodErrors } from '@/app/(utils)/(components)/ZodErrors';
-import { signupState, registerUserAction } from '@/app/api/actions/auth-actions';
+import { registerUserAction, signupState } from '@/app/api/actions/auth/signup';
+import { ZodErrors } from '@/app/utils/components/ZodErrors';
 import React from 'react'
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 
 const INITIAL_STATE: signupState = {
     zodErrors: null,
     message: ""
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus()
+
+    return (
+        <button disabled={pending} type="submit">
+            Create an Account
+        </button>
+    )
 }
 
 const SignupForm = () => {
@@ -34,7 +44,7 @@ const SignupForm = () => {
                 <input type="password" id="password" name="password" required />
                 <ZodErrors error={formState?.zodErrors?.password} />
 
-                <button type="submit">Create Account</button>
+                <SubmitButton/>
             </form>
         </div>
     )
