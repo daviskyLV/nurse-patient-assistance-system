@@ -1,8 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import './globals.css';
+import { getSession } from './api/actions/auth/session';
+import NotificationTable from './requests/NotificationTable';
 
-const Home: React.FC = () => {
+const DefaultPage: React.FC = () => {
     return (
         <div className="container">
             <h1>Assistance Tracking</h1>
@@ -13,7 +15,28 @@ const Home: React.FC = () => {
                 <button>Login</button>
             </Link>
         </div>
+    )
+}
+
+const TableViewPage: React.FC = () => {
+    return (
+        <div className="container">
+            <h1>Table View</h1>
+            <NotificationTable />
+        </div>
     );
+};
+
+const Home = async () => {
+    const session = await getSession()
+    if (!session) {
+        // Not logged in
+        return DefaultPage
+    }
+
+    // Logged in, showing notification requests page
+    // TODO: display based on logged in user?
+    return TableViewPage
 };
 
 export default Home;

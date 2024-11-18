@@ -47,6 +47,20 @@ export async function logoutSession() {
 }
 
 /**
+ * Gets the session cookie info, undefined if not logged in
+ */
+export async function getSession(): Promise<SessionPayload | undefined> {
+    const sessionJWT = (await cookies()).get("session")
+    if (!sessionJWT) return undefined
+    try {
+        const decrypted = decryptJWT(sessionJWT.value)
+        return decrypted
+    } catch (error) {
+        return undefined
+    }
+}
+
+/**
  * Creates and sets a session cookie of the user
  * @param username The username for which to create a session cookie
  */
