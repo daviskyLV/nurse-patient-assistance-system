@@ -31,12 +31,20 @@ const Home = async () => {
     const session = await getSession()
     if (!session) {
         // Not logged in
-        return DefaultPage
+        return (
+            <div>
+                <DefaultPage/>
+            </div>
+        );
     }
 
     // Logged in, showing notification requests page
     // TODO: display based on logged in user?
-    return TableViewPage
+    return (
+        <div>
+            <TableViewPage/>
+        </div>
+    );
 };
 
 export default Home;
