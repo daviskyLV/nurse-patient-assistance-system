@@ -1,13 +1,12 @@
 --DDL for the SQLite database
 CREATE TABLE IF NOT EXISTS NurseRequests (
-    request_id INTEGER PRIMARY KEY AUTOINCREMENT,   -- Request id
+    id INTEGER PRIMARY KEY AUTOINCREMENT,           -- Request id
     room_number INT NOT NULL,                       -- Room number for the request
     bed_number INT NOT NULL,                        -- Bed number within the room
     acceptedBy INT,                                 -- Id of the nurse account handling the request
-    request_date DATE NOT NULL,                     -- Date of the request
-    request_time TIME NOT NULL,                     -- Time of the request
-    response_date DATE,                             -- Date of the response
-    response_time TIME                              -- Time of the response
+    request_timestamp INT NOT NULL,                 -- Request timestamp in seconds since epoch
+    response_timestamp INT,                         -- Response timestamp in seconds since epoch
+    FOREIGN KEY(acceptedBy) REFERENCES Accounts(id)
 );
 
 CREATE TABLE IF NOT EXISTS Accounts (
