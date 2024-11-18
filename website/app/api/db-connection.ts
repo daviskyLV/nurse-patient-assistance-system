@@ -2,7 +2,8 @@ import path from "path";
 import sqlite3 from "sqlite3";
 import fs from "fs";
 import { User, isUser } from "../utils/User";
-import { isError, isNumber, isObject } from "../utils/utilFuncs";
+import { isError, isNumber, isObject, isArray } from "../utils/utilFuncs";
+import { PatientRequest } from "../utils/Request";
 sqlite3.verbose();
 
 const dbPath = path.join(process.cwd(), "database.db");
@@ -22,7 +23,10 @@ export type Database = {
         firstName: string,
         lastName: string,
         callback: ((err: Error | null) => void) | undefined
-    ): void
+    ): void,
+    getRequestsAsync(
+        limit?: number
+    ): Promise<PatientRequest[] | Error>
 }
 
 const fetchAll = async (
@@ -139,6 +143,63 @@ export const connectToDatabase = (): Database => {
         return new Error("Unknown error!")
     }
 
+    const getRequestsAsync = async (
+        limit?: number
+    ): Promise<PatientRequest[] | Error> => {
+        if (limit === undefined) limit = 1000000 // should be enough
+
+        try {
+            const rows = await fetchAll(db,
+                `SELECT id, room_number as rn, bed_number as bn, acceptedBy as acc,
+                    request_timestamp as reqtime, response_timestamp as resptime
+                FROM NurseRequests
+                LIMIT ?`,
+                [limit]
+            )
+
+            if (!isArray(rows)) {return new Error("Unknown error!")}
+            
+            const requests: PatientRequest[] = []
+            rows.forEach(row => {
+                if (!isObject(row)) {return new Error("Unknown error!")}
+                if (!("id" in row && typeof row.id === "number" &&
+                    "rn" in row && typeof row.rn === "number" &&
+                    "bn" in row && typeof row.bn === "number" &&
+                    "reqtim" in row && typeof row.reqtim === "number"
+                )) {
+                    // necessary stuff doesnt exist?
+                    return new Error("Unknown error!")
+                }
+
+                // Getting request info
+                const request: PatientRequest = {
+                    roomNumber: row.id,
+                    bedNumber: row.bn,
+                    requestDateTime: new Date(row.reqtim*1000)
+                }
+                // Populating additional fields
+                if ("acc" in row && typeof row.acc === "number") {
+                    request.acceptedBy = row.acc
+                }
+                if ("resptim" in row && typeof row.resptim === "number") {
+                    request.responseDateTime = new Date(row.resptim*1000)
+                }
+                
+                requests.push(request)
+            });
+
+            return requests
+        } catch (err) {
+            if (isError(err)) {
+                return err
+            }
+            console.warn("Unknown error!")
+            console.warn(err)
+        }
+
+        return new Error("Unknown error!")
+    }
+
     const createAccount = (
         username: string,
         passwordWithSaltHash: Buffer,
@@ -160,6 +221,7 @@ export const connectToDatabase = (): Database => {
         close: closeDb,
         usernameExistsAsync,
         createAccount,
-        userInfoAsync
+        userInfoAsync,
+        getRequestsAsync
     };
 }
