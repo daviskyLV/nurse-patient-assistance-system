@@ -3,6 +3,7 @@ import React from 'react'
 import { useFormState } from 'react-dom';
 import { ZodErrors } from '@/app/utils/components/ZodErrors';
 import { authenticateUserAction, authenticationState } from '@/app/api/actions/auth/login';
+import '../auth-styles.css';
 
 const INITIAL_STATE: authenticationState = {
     zodErrors: null,

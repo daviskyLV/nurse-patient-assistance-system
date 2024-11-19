@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import AttendButton from './AttendButton';
+import CSVButton from './CSVButton'; 
+import LogoutButton from './LogoutButton';
 
 type Notification = {
     reqNo: number;
@@ -17,7 +19,7 @@ type Notification = {
 const initialNotifications: Notification[] = [
     { reqNo: 1, room: 'A1', bed: 3, reqDate: '3/11/2024', reqTime: '18:37' },
     { reqNo: 2, room: 'D2', bed: 2, reqDate: '3/11/2024', reqTime: '18:40' },
-    // Add as much data as needed
+    // Add more data as necessary
 ];
 
 // Assume "Maria Dan" is the currently logged-in nurse
@@ -41,45 +43,51 @@ const NotificationTable: React.FC = () => {
         );
     };
 
-
     return (
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>Req No</th>
-                    <th>Room</th>
-                    <th>Bed</th>
-                    <th>Req Date</th>
-                    <th>Req Time</th>
-                    <th>Nurse</th>
-                    <th>Attendance Date</th>
-                    <th>Attendance Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {notifications.map((notification) => (
-                    <tr key={notification.reqNo}>
-                        <td>{notification.reqNo}</td>
-                        <td>{notification.room}</td>
-                        <td>{notification.bed}</td>
-                        <td>{notification.reqDate}</td>
-                        <td>{notification.reqTime}</td>
-                        <td>
-                            {notification.nurse ? (
-                                notification.nurse
-                            ) : (
-                                <AttendButton 
-                                reqNo={notification.reqNo} 
-                                nurseName={currentNurseName}
-                                onAttend={handleAttend} />
-                            )}
-                        </td>
-                        <td>{notification.attendanceDate || '-'}</td>
-                        <td>{notification.attendanceTime || '-'}</td>
+        <div className="notification-table-container">
+            <div className="table-buttons">
+                <CSVButton data={notifications} fileName="notifications" />
+                <LogoutButton />
+            </div>
+
+            <table className="notification-table">
+                <thead>
+                    <tr>
+                        <th>Req No</th>
+                        <th>Room</th>
+                        <th>Bed</th>
+                        <th>Req Date</th>
+                        <th>Req Time</th>
+                        <th>Nurse</th>
+                        <th>Attendance Date</th>
+                        <th>Attendance Time</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {notifications.map((notification) => (
+                        <tr key={notification.reqNo}>
+                            <td>{notification.reqNo}</td>
+                            <td>{notification.room}</td>
+                            <td>{notification.bed}</td>
+                            <td>{notification.reqDate}</td>
+                            <td>{notification.reqTime}</td>
+                            <td>
+                                {notification.nurse ? (
+                                    notification.nurse
+                                ) : (
+                                    <AttendButton 
+                                        reqNo={notification.reqNo} 
+                                        nurseName={currentNurseName}
+                                        onAttend={handleAttend} />
+                                )}
+                            </td>
+                            <td>{notification.attendanceDate || '-'}</td>
+                            <td>{notification.attendanceTime || '-'}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 
