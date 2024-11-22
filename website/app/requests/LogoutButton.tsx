@@ -14,7 +14,7 @@ const LogoutButton: React.FC = () => {
 
             router.push('/');
         } catch (error) {
-            console.error("Logout failed:");
+            console.error("Logout failed:", error);
         }
 
     };

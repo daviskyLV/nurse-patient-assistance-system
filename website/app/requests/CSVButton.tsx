@@ -6,9 +6,20 @@ interface CSVButtonProps {
 }
 
 const CSVButton: React.FC<CSVButtonProps> = ({ data, fileName }) => {
+  const headerMappings: Record<string, string> = {
+    id: 'Request ID',
+    name: 'Full Name',
+    email: 'Email Address',
+    createdAt: 'Creation Date',
+  };
+  
   const exportToCSV = () => {
-    const headers = Object.keys(data[0]);
-    const rows = data.map(item => headers.map(header => item[header]).join(','));
+    const originalHeaders = Object.keys(data[0]);
+    const headers = originalHeaders.map(header => headerMappings[header] || header);
+
+    const rows = data.map(item =>
+      originalHeaders.map(header => item[header]).join(',')
+    );
     
     // Create CSV content
     let csvContent = 'data:text/csv;charset=utf-8,' + headers.join(',') + '\n';

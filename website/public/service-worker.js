@@ -1,12 +1,14 @@
 self.addEventListener('push', function(event) {
     const data = event.data.json();
+    const requestId = data.requestId;
+
     const options = {
         body: `Room ${data.room}, Bed ${data.bed}`,
-        icon: '/icon.png', // Add an icon path
-        badge: '/badge.png', // Add a badge path
+        icon: '/icons/icon.png',
+        badge: '/icons/badge.png',
         actions: [
-            { action: 'accept', title: 'Accept', icon: '/accept-icon.png' },
-            { action: 'decline', title: 'Decline', icon: '/decline-icon.png' }
+            { action: 'accept', title: 'Accept', icon: '/icons/accept-icon.png' },
+            { action: 'decline', title: 'Decline', icon: '/icons/decline-icon.png' }
         ]
     };
 
@@ -17,10 +19,17 @@ self.addEventListener('push', function(event) {
 
 self.addEventListener('notificationclick', function(event) {
     event.notification.close();
+
+    const requestId = event.notification.data?.requestId;
+    
     if (event.action === 'accept') {
-        clients.openWindow('/accept-path');
+        if (requestId) {
+            clients.openWindow(`/api/accept-request/${requestId}`);
+        } else {
+            console.error("Request ID is missing for the 'accept' action.");
+        }
     } else if (event.action === 'decline') {
-        clients.openWindow('/decline-path');
+        console.log("'Decline' action clicked. No further action taken.");
     } else {
         clients.openWindow('/');
     }
