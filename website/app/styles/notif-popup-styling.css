@@ -1,0 +1,96 @@
+.notification-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%); /* make sure its truly centered */
+    background-color: #f8f9fa;
+    border: 2px solid #d1d1d1;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.notification-popup h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.notification-popup .notification-details {
+    margin: 15px 0;
+    font-size: 16px;
+    color: #495057;
+}
+
+.notification-popup .notification-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.accept-button,
+.decline-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.accept-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.accept-button:hover {
+    background-color: #218838;
+}
+
+.decline-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.decline-button:hover {
+    background-color: #c82333;
+}
+
+.notification-popup .notification-action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.notification-action-buttons button {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.notification-action-buttons .accept-button {
+    background-color: #28a745;
+}
+
+.notification-action-buttons .accept-button:hover {
+    background-color: #218838;
+}
+
+.notification-action-buttons .decline-button {
+    background-color: #dc3545;
+}
+
+.notification-action-buttons .decline-button:hover {
+    background-color: #c82333;
+}

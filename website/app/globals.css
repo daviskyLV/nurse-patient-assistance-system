@@ -21,6 +21,8 @@ body {
   align-items: center;
   margin: 0;
   padding: 20px;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .container {
@@ -38,22 +40,6 @@ h1, h2 {
   margin-bottom: 20px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
 button {
   padding: 10px;
   margin-top: 20px;
@@ -68,3 +54,7 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+/* Importing additional styles for Notification Table and Popup */
+@import './styles/notif-table-styling.css';
+@import './styles/notif-popup-styling.css';

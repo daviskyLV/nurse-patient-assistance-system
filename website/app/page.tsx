@@ -3,6 +3,7 @@ import Link from 'next/link';
 import './globals.css';
 import { getSession } from './api/actions/auth/session';
 import NotificationTable from './requests/NotificationTable';
+import NotificationPopup from './requests/NotificationPopup';
 
 const DefaultPage: React.FC = () => {
     return (
@@ -15,20 +16,23 @@ const DefaultPage: React.FC = () => {
                 <button>Login</button>
             </Link>
         </div>
-    )
-}
+    );
+};
 
 const TableViewPage: React.FC = () => {
     return (
         <div className="container">
-            <h1>Table View</h1>
+            <h1>Assistance Tracking</h1>
+            <div className="table-buttons">
+            </div>
             <NotificationTable />
         </div>
     );
 };
 
 const Home = async () => {
-    const session = await getSession()
+    const session = await getSession();
+
     if (!session) {
         // Not logged in
         return (
@@ -43,6 +47,7 @@ const Home = async () => {
     return (
         <div>
             <TableViewPage/>
+            <NotificationPopup />  {/* Render NotificationPopup here */}
         </div>
     );
 };
