@@ -9,3 +9,7 @@ export function isNumber(obj: unknown): obj is number {
 export function isObject(obj: unknown): obj is object {
     return typeof obj === 'object' && obj !== null
 }
+
+export function isArray(obj: unknown): obj is unknown[] {
+    return Array.isArray(obj)
+}
