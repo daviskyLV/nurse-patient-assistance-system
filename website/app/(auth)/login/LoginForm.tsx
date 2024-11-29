@@ -1,14 +1,10 @@
 "use client";
 import React from 'react'
 import { useFormState } from 'react-dom';
-import { authenticateUserAction, authenticationState } from '@/app/api/actions/auth-actions';
 import { ZodErrors } from '@/app/utils/components/ZodErrors';
+import { authenticateUserAction, authenticationState } from '@/app/api/actions/auth/login';
 
 const INITIAL_STATE: authenticationState = {
-    auth: {
-        cookie: "",
-        username: ""
-    },
     zodErrors: null,
     message: ""
 }
