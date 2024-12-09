@@ -46,6 +46,7 @@ export default NotificationPopup; */
 
 import React, { useEffect } from 'react';
 import '../styles/notif-popup-styling.css';
+import { debug } from 'console';
 
 interface NotificationAction {
   action: string;
@@ -57,14 +58,22 @@ interface CustomNotificationOptions extends NotificationOptions {
   actions?: Array<NotificationAction>;
 }
 
-const NotificationPopup: React.FC = () => {
+export const NotificationPopup: React.FC = () => {
   useEffect(() => {
+    console.log("Use effect running")
+    console.log('Notification' in window)
+    console.log('serviceWorker' in navigator)
     if ('Notification' in window && 'serviceWorker' in navigator) {
+      console.log("Inside notif and servWorker if")
       // permission to show notifications
       Notification.requestPermission().then(permission => {
+        console.log("Requested permission")
         if (permission === 'granted') {
+          console.log("Permission granted")
           // service worker is ready
+          // TODO: FIX
           navigator.serviceWorker.ready.then(registration => {
+            console.log("Navigator Service Worker ready")
             const options: CustomNotificationOptions = {
               body: 'Room A1, Bed 3',
               icon: '/icon.png',
@@ -82,6 +91,8 @@ const NotificationPopup: React.FC = () => {
               ],
               requireInteraction: true,  // notification visible until user interacts
             };
+            console.log("OPTIONS:")
+            console.log(options)
 
             // notification with custom options
             registration.showNotification('ALERT!', options);
