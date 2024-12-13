@@ -294,7 +294,7 @@ int main(void)
     // Initialize.
     log_init();
     timers_init();
-    leds_init();
+    //leds_init();
     power_management_init();
     ble_stack_init();
     advertising_init();
