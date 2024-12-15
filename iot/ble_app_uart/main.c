@@ -66,7 +66,7 @@
 #include "ble_nus.h"
 #include "app_uart.h"
 #include "app_util_platform.h"
-//#include "bsp_btn_ble.h"
+#include "bsp_btn_ble.h"
 #include "nrf_pwr_mgmt.h"
 
 #if defined (UART_PRESENT)
@@ -82,7 +82,7 @@
 
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
 
-#define DEVICE_NAME                     "Nordic_UART TESTING"                               /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "Nordic_UART"                               /**< Name of device. Will be included in the advertising data. */
 #define NUS_SERVICE_UUID_TYPE           BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
 
 #define APP_BLE_OBSERVER_PRIO           3                                           /**< Application's BLE observer priority. You shouldn't need to modify this value. */
@@ -635,18 +635,18 @@ static void advertising_init(void)
  *
  * @param[out] p_erase_bonds  Will be true if the clear bonding button was pressed to wake the application up.
  */
-//static void buttons_leds_init(bool * p_erase_bonds)
-//{
-//    bsp_event_t startup_event;
+static void buttons_leds_init(bool * p_erase_bonds)
+{
+    bsp_event_t startup_event;
 
-//    uint32_t err_code = bsp_init(BSP_INIT_LEDS | BSP_INIT_BUTTONS, bsp_event_handler);
-//    APP_ERROR_CHECK(err_code);
+    uint32_t err_code = bsp_init(BSP_INIT_LEDS | BSP_INIT_BUTTONS, bsp_event_handler);
+    APP_ERROR_CHECK(err_code);
 
-//    err_code = bsp_btn_ble_init(NULL, &startup_event);
-//    APP_ERROR_CHECK(err_code);
+    err_code = bsp_btn_ble_init(NULL, &startup_event);
+    APP_ERROR_CHECK(err_code);
 
-//    *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
-//}
+    *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
+}
 
 
 /**@brief Function for initializing the nrf log module.
@@ -702,7 +702,7 @@ int main(void)
     uart_init();
     log_init();
     timers_init();
-    //buttons_leds_init(&erase_bonds);
+    buttons_leds_init(&erase_bonds);
     power_management_init();
     ble_stack_init();
     gap_params_init();
