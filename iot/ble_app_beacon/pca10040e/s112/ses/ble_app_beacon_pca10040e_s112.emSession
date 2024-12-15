@@ -38,7 +38,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="65" y="76" useTextEdit="1" path="../../../main.c" left="0" selected="1" top="281" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../../../../ble_app_uart/nrf52805-uart-project" left="0" selected="1" top="0" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="ble_app_beacon_pca10040e_s112" fileDialogDefaultFilter="*.asm;*.s;*.inc" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/andrejs/Programming/School/Bachelor/nurse-patient-assistance-system/iot/ble_app_beacon/pca10040e/s112/ses" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
