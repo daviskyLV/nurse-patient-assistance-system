@@ -5,9 +5,9 @@ import AttendButton from './AttendButton';
 import CSVButton from './CSVButton'; 
 import LogoutButton from './LogoutButton';
 
-type Notification = {
+export type Notification = {
     reqNo: number;
-    room: string;
+    room: number;
     bed: number;
     reqDate: string;
     reqTime: string;
@@ -16,16 +16,18 @@ type Notification = {
     attendanceTime?: string;
 };
 
-const initialNotifications: Notification[] = [
-    { reqNo: 1, room: 'A1', bed: 3, reqDate: '3/11/2024', reqTime: '18:37' },
-    { reqNo: 2, room: 'D2', bed: 2, reqDate: '3/11/2024', reqTime: '18:40' },
-    // Add more data as necessary
-];
+// const initialNotifications: Notification[] = [
+//     { reqNo: 1, room: 'A1', bed: 3, reqDate: '3/11/2024', reqTime: '18:37' },
+//     { reqNo: 2, room: 'D2', bed: 2, reqDate: '3/11/2024', reqTime: '18:40' },
+//     // Add more data as necessary
+// ];
 
-// Assume "Maria Dan" is the currently logged-in nurse
-const currentNurseName = "Maria Dan"; 
+type NotificationTableProps = {
+    currentNurseName: string;
+    initialNotifications: Notification[];
+}
 
-const NotificationTable: React.FC = () => {
+const NotificationTable: React.FC<NotificationTableProps> = ({currentNurseName, initialNotifications}) => {
     const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
 
     const handleAttend = (reqNo: number, attendanceDate: string, attendanceTime: string, nurseName: string) => {

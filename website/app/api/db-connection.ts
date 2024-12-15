@@ -14,7 +14,7 @@ export type Database = {
         username: string
     ): Promise<boolean | Error>,
     userInfoAsync(
-        username: string
+        user: string | number
     ): Promise<User | Error>
     createAccount(
         username: string,
@@ -122,15 +122,26 @@ export const connectToDatabase = (): Database => {
     }
 
     const userInfoAsync = async (
-        username: string
+        user: string | number
     ): Promise<User | Error> => {
         try {
-            const row = await fetchFirst(db,
-                `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
-                FROM Accounts
-                WHERE username = ?;`,
-                [username]
-            );
+            let row: unknown;
+            if (typeof user === "string") {
+                row = await fetchFirst(db,
+                    `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
+                    FROM Accounts
+                    WHERE username = ?;`,
+                    [user]
+                );
+            } else {
+                row = await fetchFirst(db,
+                    `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
+                    FROM Accounts
+                    WHERE id = ?;`,
+                    [user]
+                );
+            }
+            
             
             if (!isObject(row)) {return new Error("Unknown error!")}
             if (!isUser(row)) {return new Error("Unknown error!")}
