@@ -181,7 +181,7 @@ export const connectToDatabase = (): Database => {
                 if (!("id" in row && typeof row.id === "number" &&
                     "rn" in row && typeof row.rn === "number" &&
                     "bn" in row && typeof row.bn === "number" &&
-                    "reqtim" in row && typeof row.reqtim === "number"
+                    "reqtime" in row && typeof row.reqtime === "number"
                 )) {
                     // necessary stuff doesnt exist?
                     return new Error("Unknown error!")
@@ -189,16 +189,17 @@ export const connectToDatabase = (): Database => {
 
                 // Getting request info
                 const request: PatientRequest = {
-                    roomNumber: row.id,
+                    id: row.id,
+                    roomNumber: row.rn,
                     bedNumber: row.bn,
-                    requestDateTime: new Date(row.reqtim*1000)
+                    requestDateTime: new Date(row.reqtime*1000)
                 }
                 // Populating additional fields
                 if ("acc" in row && typeof row.acc === "number") {
                     request.acceptedBy = row.acc
                 }
-                if ("resptim" in row && typeof row.resptim === "number") {
-                    request.responseDateTime = new Date(row.resptim*1000)
+                if ("resptime" in row && typeof row.resptime === "number") {
+                    request.responseDateTime = new Date(row.resptime*1000)
                 }
                 
                 requests.push(request)
@@ -245,6 +246,7 @@ export const connectToDatabase = (): Database => {
             [room, bed, requestedAt.getTime()/1000],
             undefined
         )
+        console.log("Database exectued!")
     }
 
     return {

@@ -21,19 +21,26 @@ const DefaultPage: React.FC = () => {
     );
 };
 
+// const defaultNotifs: Notification[] = [
+//     { reqNo: 1, room: 1, bed: 3, reqDate: '3/11/2024', reqTime: '18:37' },
+//     { reqNo: 2, room: 2, bed: 2, reqDate: '3/11/2024', reqTime: '18:40' },
+//     // Add more data as necessary
+// ];
+
 const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => {
     const db = connectToDatabase()
     // Getting initial notifications
     const patientRequests = await db.getRequestsAsync()
-    const initialNotifs: Notification[] = []
+    let initialNotifs: Notification[] = []
     if (!isError(patientRequests)) {
-        patientRequests.forEach(async req => {
+        for (let i = 0; i < patientRequests.length; i++) {
+            const req = patientRequests[i]
             const reqDt = req.requestDateTime
             const notif: Notification = {
                 reqNo: (req.id ? req.id : -1),
                 room: req.roomNumber,
                 bed: req.bedNumber,
-                reqDate: `${reqDt.getFullYear()}-${reqDt.getMonth()}-${reqDt.getDay()}`,
+                reqDate: `${reqDt.getFullYear()}-${reqDt.getMonth()}-${reqDt.getDate()}`,
                 reqTime: `${reqDt.getHours()}:${reqDt.getMinutes()}:${reqDt.getSeconds()}`
             }
             // Checking if request already accepted
@@ -45,14 +52,16 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
                 }
                 const attDt = req.requestDateTime
                 if (req.responseDateTime !== undefined) {
-                    notif.attendanceDate = `${attDt.getFullYear()}-${attDt.getMonth()}-${attDt.getDay()}`,
+                    notif.attendanceDate = `${attDt.getFullYear()}-${attDt.getMonth()}-${attDt.getDate()}`,
                     notif.attendanceTime = `${attDt.getHours()}:${attDt.getMinutes()}:${attDt.getSeconds()}`
                 }
             }
 
-            initialNotifs.push()
-        });
+            initialNotifs.push(notif)
+        }
     }
+
+    //initialNotifs = [...initialNotifs, ...defaultNotifs]
     
     // Getting nurse info
     const userInfo = await db.userInfoAsync(session.username)
@@ -92,7 +101,7 @@ const Home = async () => {
     return (
         <div>
             <TableViewPage session={session}/>
-            <NotificationPopup />  {/* Render NotificationPopup here */}
+            <NotificationPopup />
         </div>
     );
 };
