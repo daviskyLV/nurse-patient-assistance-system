@@ -7,7 +7,7 @@ const cookiesConfig = {
     path: "/",
     domain: process.env.HOST ?? "localhost",
     httpOnly: true,
-    secure: true, //process.env.NODE_ENV === "production"
+    secure: false, //process.env.NODE_ENV === "production"
 };
 
 export type SessionPayload = {

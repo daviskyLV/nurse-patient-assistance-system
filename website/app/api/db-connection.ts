@@ -24,6 +24,11 @@ export type Database = {
         lastName: string,
         callback: ((err: Error | null) => void) | undefined
     ): void,
+    createPatientRequest(
+        room: number,
+        bed: number,
+        requestedAt: Date
+    ): void
     getRequestsAsync(
         limit?: number
     ): Promise<PatientRequest[] | Error>
@@ -217,11 +222,26 @@ export const connectToDatabase = (): Database => {
         )
     }
 
+    const createPatientRequest = (
+        room: number,
+        bed: number,
+        requestedAt: Date
+    ) => {
+        db.run(`
+            INSERT INTO NurseRequests (room_number, bed_number, request_timestamp)
+            VALUES (?, ?, ?);
+            `,
+            [room, bed, requestedAt.getTime()/1000],
+            undefined
+        )
+    }
+
     return {
         close: closeDb,
         usernameExistsAsync,
         createAccount,
         userInfoAsync,
-        getRequestsAsync
+        getRequestsAsync,
+        createPatientRequest
     };
 }
