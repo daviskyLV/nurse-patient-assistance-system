@@ -16,22 +16,20 @@ export type Notification = {
     attendanceTime?: string;
 };
 
-// const initialNotifications: Notification[] = [
-//     { reqNo: 1, room: 'A1', bed: 3, reqDate: '3/11/2024', reqTime: '18:37' },
-//     { reqNo: 2, room: 'D2', bed: 2, reqDate: '3/11/2024', reqTime: '18:40' },
-//     // Add more data as necessary
-// ];
-
 type NotificationTableProps = {
     currentNurseName: string;
+    currentNurseId: number;
     initialNotifications: Notification[];
 }
 
-const NotificationTable: React.FC<NotificationTableProps> = ({currentNurseName, initialNotifications}) => {
+const NotificationTable: React.FC<NotificationTableProps> = ({
+    currentNurseName, initialNotifications, currentNurseId
+}) => {
     const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
 
     const handleAttend = (reqNo: number, attendanceDate: string, attendanceTime: string, nurseName: string) => {
-        setNotifications((prevNotifications) =>
+        // updating table
+        setNotifications((prevNotifications) => 
             prevNotifications.map((notification) =>
                 notification.reqNo === reqNo
                     ? {
@@ -80,7 +78,8 @@ const NotificationTable: React.FC<NotificationTableProps> = ({currentNurseName, 
                                     <AttendButton 
                                         reqNo={notification.reqNo} 
                                         nurseName={currentNurseName}
-                                        onAttend={handleAttend} />
+                                        onAttend={handleAttend}
+                                        nurseId={currentNurseId} />
                                 )}
                             </td>
                             <td>{notification.attendanceDate || '-'}</td>

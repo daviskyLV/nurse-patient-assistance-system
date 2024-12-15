@@ -28,7 +28,12 @@ export type Database = {
         room: number,
         bed: number,
         requestedAt: Date
-    ): void
+    ): void,
+    acceptPatientRequest(
+        requestId: number,
+        nurseId: number,
+        acceptedAt: Date
+    ): void,
     getRequestsAsync(
         limit?: number
     ): Promise<PatientRequest[] | Error>
@@ -234,6 +239,20 @@ export const connectToDatabase = (): Database => {
         )
     }
 
+    const acceptPatientRequest = (
+        requestId: number,
+        nurseId: number,
+        acceptedAt: Date
+    ) => {
+        db.run(`
+            UPDATE NurseRequests SET acceptedBy=?, response_timestamp=?
+            WHERE id=?
+            `,
+            [nurseId, acceptedAt.getTime()/1000, requestId],
+            undefined
+        )
+    }
+
     const createPatientRequest = (
         room: number,
         bed: number,
@@ -255,6 +274,7 @@ export const connectToDatabase = (): Database => {
         createAccount,
         userInfoAsync,
         getRequestsAsync,
-        createPatientRequest
+        createPatientRequest,
+        acceptPatientRequest
     };
 }

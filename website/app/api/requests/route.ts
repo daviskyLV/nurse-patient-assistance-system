@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     
 
     // Creating the request
-    const dateNow = new Date(Date.now())
+    const dateNow = new Date()
     const db = connectToDatabase()
     db.createPatientRequest(
         patientRequest.room,

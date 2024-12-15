@@ -31,7 +31,7 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
     const db = connectToDatabase()
     // Getting initial notifications
     const patientRequests = await db.getRequestsAsync()
-    let initialNotifs: Notification[] = []
+    const initialNotifs: Notification[] = []
     if (!isError(patientRequests)) {
         for (let i = 0; i < patientRequests.length; i++) {
             const req = patientRequests[i]
@@ -40,8 +40,8 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
                 reqNo: (req.id ? req.id : -1),
                 room: req.roomNumber,
                 bed: req.bedNumber,
-                reqDate: `${reqDt.getFullYear()}-${reqDt.getMonth()}-${reqDt.getDate()}`,
-                reqTime: `${reqDt.getHours()}:${reqDt.getMinutes()}:${reqDt.getSeconds()}`
+                reqDate: reqDt.toLocaleDateString(),
+                reqTime: reqDt.toLocaleTimeString()
             }
             // Checking if request already accepted
             if (req.acceptedBy !== undefined) {
@@ -50,10 +50,11 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
                 if (!isError(userInfo)) {
                     notif.nurse = userInfo.firstName
                 }
-                const attDt = req.requestDateTime
+                
                 if (req.responseDateTime !== undefined) {
-                    notif.attendanceDate = `${attDt.getFullYear()}-${attDt.getMonth()}-${attDt.getDate()}`,
-                    notif.attendanceTime = `${attDt.getHours()}:${attDt.getMinutes()}:${attDt.getSeconds()}`
+                    const attDt = req.responseDateTime
+                    notif.attendanceDate = attDt.toLocaleDateString(),
+                    notif.attendanceTime = attDt.toLocaleTimeString()
                 }
             }
 
@@ -66,9 +67,13 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
     // Getting nurse info
     const userInfo = await db.userInfoAsync(session.username)
     let nurseName = session.username
+    let nurseId = -1
     db.close()
     if (!isError(userInfo)) {
         nurseName = userInfo.firstName
+        if (userInfo.id !== undefined) {
+            nurseId = userInfo.id
+        }
     }
 
     return (
@@ -79,6 +84,7 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
             <NotificationTable
                 currentNurseName={nurseName}
                 initialNotifications={initialNotifs}
+                currentNurseId={nurseId}
             />
         </div>
     );
