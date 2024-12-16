@@ -20,20 +20,28 @@ body {
   justify-content: center;
   align-items: center;
   margin: 0;
-  padding: 20px;
+  padding: 0;
   background-color: var(--background);
   color: var(--foreground);
+  height: 100vh;
 }
 
 .container {
-  text-align: center;
-  max-width: 90%;
   width: 100%;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  overflow-x: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  /*background-color: var(--background);
+  color: var(--foreground); */
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px; /* Add some padding on smaller screens */
+  }
 }
 
 h1, h2 {

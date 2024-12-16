@@ -63,3 +63,18 @@ button:hover {
     margin-top: -10px;
     margin-bottom: 10px;
 }
+
+.login-redirect {
+    margin-top: 20px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
