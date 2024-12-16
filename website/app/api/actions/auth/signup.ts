@@ -12,7 +12,9 @@ export type signupState = {
 }
 
 const inputValidator = z.object({
-    username: z.string().trim().min(3).max(30, {
+    username: z.string().trim().min(3, {
+        message: "Username must be between 3 and 30 characters"
+    }).max(30, {
         message: "Username must be between 3 and 30 characters"
     }),
     password: z.string().trim().min(10)
