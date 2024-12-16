@@ -14,7 +14,7 @@ export type Database = {
         username: string
     ): Promise<boolean | Error>,
     userInfoAsync(
-        username: string
+        user: string | number
     ): Promise<User | Error>
     createAccount(
         username: string,
@@ -23,6 +23,16 @@ export type Database = {
         firstName: string,
         lastName: string,
         callback: ((err: Error | null) => void) | undefined
+    ): void,
+    createPatientRequest(
+        room: number,
+        bed: number,
+        requestedAt: Date
+    ): void,
+    acceptPatientRequest(
+        requestId: number,
+        nurseId: number,
+        acceptedAt: Date
     ): void,
     getRequestsAsync(
         limit?: number
@@ -117,15 +127,26 @@ export const connectToDatabase = (): Database => {
     }
 
     const userInfoAsync = async (
-        username: string
+        user: string | number
     ): Promise<User | Error> => {
         try {
-            const row = await fetchFirst(db,
-                `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
-                FROM Accounts
-                WHERE username = ?;`,
-                [username]
-            );
+            let row: unknown;
+            if (typeof user === "string") {
+                row = await fetchFirst(db,
+                    `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
+                    FROM Accounts
+                    WHERE username = ?;`,
+                    [user]
+                );
+            } else {
+                row = await fetchFirst(db,
+                    `SELECT id, username, first_name as firstName, last_name as lastName, salt_hashed_password as password, password_salt as passwordSalt
+                    FROM Accounts
+                    WHERE id = ?;`,
+                    [user]
+                );
+            }
+            
             
             if (!isObject(row)) {return new Error("Unknown error!")}
             if (!isUser(row)) {return new Error("Unknown error!")}
@@ -165,7 +186,7 @@ export const connectToDatabase = (): Database => {
                 if (!("id" in row && typeof row.id === "number" &&
                     "rn" in row && typeof row.rn === "number" &&
                     "bn" in row && typeof row.bn === "number" &&
-                    "reqtim" in row && typeof row.reqtim === "number"
+                    "reqtime" in row && typeof row.reqtime === "number"
                 )) {
                     // necessary stuff doesnt exist?
                     return new Error("Unknown error!")
@@ -173,16 +194,17 @@ export const connectToDatabase = (): Database => {
 
                 // Getting request info
                 const request: PatientRequest = {
-                    roomNumber: row.id,
+                    id: row.id,
+                    roomNumber: row.rn,
                     bedNumber: row.bn,
-                    requestDateTime: new Date(row.reqtim*1000)
+                    requestDateTime: new Date(row.reqtime*1000)
                 }
                 // Populating additional fields
                 if ("acc" in row && typeof row.acc === "number") {
                     request.acceptedBy = row.acc
                 }
-                if ("resptim" in row && typeof row.resptim === "number") {
-                    request.responseDateTime = new Date(row.resptim*1000)
+                if ("resptime" in row && typeof row.resptime === "number") {
+                    request.responseDateTime = new Date(row.resptime*1000)
                 }
                 
                 requests.push(request)
@@ -217,11 +239,42 @@ export const connectToDatabase = (): Database => {
         )
     }
 
+    const acceptPatientRequest = (
+        requestId: number,
+        nurseId: number,
+        acceptedAt: Date
+    ) => {
+        db.run(`
+            UPDATE NurseRequests SET acceptedBy=?, response_timestamp=?
+            WHERE id=?
+            `,
+            [nurseId, acceptedAt.getTime()/1000, requestId],
+            undefined
+        )
+    }
+
+    const createPatientRequest = (
+        room: number,
+        bed: number,
+        requestedAt: Date
+    ) => {
+        db.run(`
+            INSERT INTO NurseRequests (room_number, bed_number, request_timestamp)
+            VALUES (?, ?, ?);
+            `,
+            [room, bed, requestedAt.getTime()/1000],
+            undefined
+        )
+        console.log("Database exectued!")
+    }
+
     return {
         close: closeDb,
         usernameExistsAsync,
         createAccount,
         userInfoAsync,
-        getRequestsAsync
+        getRequestsAsync,
+        createPatientRequest,
+        acceptPatientRequest
     };
 }

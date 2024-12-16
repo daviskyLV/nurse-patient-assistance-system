@@ -13,6 +13,7 @@
   <ProjectSessionItem path="ble_app_beacon_pca10040e_s112;ble_app_beacon_pca10040e_s112"/>
   <ProjectSessionItem path="ble_app_beacon_pca10040e_s112;ble_app_beacon_pca10040e_s112;Application"/>
   <ProjectSessionItem path="ble_app_beacon_pca10040e_s112;ble_app_beacon_pca10040e_s112;None"/>
+  <ProjectSessionItem path="ble_app_beacon_pca10040e_s112;ble_app_beacon_pca10040e_s112;nRF_Libraries"/>
  </Project>
  <Register1/>
  <Register2/>
@@ -37,8 +38,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../../../main.c" left="0" top="63" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../config/sdk_config.h" left="0" selected="1" top="204" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" path="../../../../ble_app_uart/nrf52805-uart-project" left="0" selected="1" top="0" codecName="Default"/>
  </Files>
  <EMStudioWindow activeProject="ble_app_beacon_pca10040e_s112" fileDialogDefaultFilter="*.asm;*.s;*.inc" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="/home/andrejs/Programming/School/Bachelor/nurse-patient-assistance-system/iot/ble_app_beacon/pca10040e/s112/ses" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

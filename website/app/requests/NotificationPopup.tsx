@@ -76,17 +76,17 @@ export const NotificationPopup: React.FC = () => {
             console.log("Navigator Service Worker ready")
             const options: CustomNotificationOptions = {
               body: 'Room A1, Bed 3',
-              icon: '/icon.png',
+              icon: '/icons/icon.png',
               actions: [
                 {
                   action: 'accept',
                   title: 'Accept',
-                  icon: '/accept-icon.png',
+                  icon: '/icons/accept-icon.png',
                 },
                 {
                   action: 'decline',
                   title: 'Decline',
-                  icon: '/decline-icon.png',
+                  icon: '/icons/decline-icon.png',
                 },
               ],
               requireInteraction: true,  // notification visible until user interacts
