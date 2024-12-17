@@ -1,25 +1,12 @@
 import React from 'react';
-import Link from 'next/link';
 import './globals.css';
 import { getSession, SessionPayload } from './api/actions/auth/session';
 import NotificationTable, { Notification } from './requests/NotificationTable';
 import NotificationPopup from './requests/NotificationPopup';
 import { connectToDatabase } from './api/db-connection';
 import { isError } from './utils/utilFuncs';
+import DefaultPage from './defaultPage';
 
-const DefaultPage: React.FC = () => {
-    return (
-        <div className="container">
-            <h1>Assistance Tracking</h1>
-            <Link href="/signup">
-                <button>Create Account</button>
-            </Link>
-            <Link href="/login">
-                <button>Login</button>
-            </Link>
-        </div>
-    );
-};
 
 // const defaultNotifs: Notification[] = [
 //     { reqNo: 1, room: 1, bed: 3, reqDate: '3/11/2024', reqTime: '18:37' },
