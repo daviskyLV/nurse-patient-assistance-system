@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { acceptPatientRequest } from '../api/actions/requests/accept';
+import { acceptPatientRequest } from '@/app/api/actions/requests/accept'; 
 
 interface AttendButtonProps {
     reqNo: number;

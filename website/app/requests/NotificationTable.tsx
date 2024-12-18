@@ -28,7 +28,7 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
     const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
 
     const handleAttend = (reqNo: number, attendanceDate: string, attendanceTime: string, nurseName: string) => {
-        // updating table
+        // updating the modified row
         setNotifications((prevNotifications) => 
             prevNotifications.map((notification) =>
                 notification.reqNo === reqNo
@@ -42,6 +42,8 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
             )
         );
     };
+
+    
 
     return (
         <div className="notification-table-container">

@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="InTheHand.BluetoothLE" Version="4.0.37" />
-      <PackageReference Include="SQLite" Version="3.13.0" />
+      <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
     </ItemGroup>
 
 </Project>
