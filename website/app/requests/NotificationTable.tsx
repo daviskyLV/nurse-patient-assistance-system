@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import AttendButton from './AttendButton';
-import CSVButton from './CSVButton'; 
-import LogoutButton from './LogoutButton';
+import AttendButton from './buttons/AttendButton';
+import CSVButton from './buttons/CSVButton'; 
+import LogoutButton from './buttons/LogoutButton';
 
 export type Notification = {
     reqNo: number;

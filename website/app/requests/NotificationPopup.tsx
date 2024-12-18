@@ -46,7 +46,6 @@ export default NotificationPopup; */
 
 import React, { useEffect } from 'react';
 import '../styles/notif-popup-styling.css';
-import { debug } from 'console';
 
 interface NotificationAction {
   action: string;
