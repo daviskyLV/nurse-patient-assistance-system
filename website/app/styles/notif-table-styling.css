@@ -1,13 +1,17 @@
 .notification-table-container {
     position: relative;
     margin-bottom: 30px;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile devices */
+    max-width: 100%;
 }
 
 .table-buttons {
     display: flex;
-    justify-content: space-between; 
-    margin-bottom: 15px; 
-    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 10px;
 }
 
 .export-btn {
@@ -57,6 +61,7 @@
     border: 1px solid #e2e2e2;
     font-size: 14px;
     color: #495057;
+    white-space: nowrap; /* Prevent text from wrapping */
 }
 
 .notification-table th {
@@ -86,4 +91,32 @@
 
 .notification-table .attend-button:hover {
     background-color: #218838;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .table-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center;
+        gap: 10px;
+    }
+
+    .export-btn,
+    .logout-btn {
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        padding: 8px 0;
+    }
+
+    .notification-table th,
+    .notification-table td {
+        padding: 8px 10px;
+        font-size: 12px; /* Reduce font size for small screens */
+    }
+
+    .notification-table-container {
+        border: 1px solid #ddd; /* Add a border for better visual appearance */
+        border-radius: 5px;
+    }
 }
