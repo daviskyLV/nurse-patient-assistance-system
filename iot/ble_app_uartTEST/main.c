@@ -113,6 +113,9 @@
 #define TX_PIN_NUMBER                   18
 #define BUTTON_PIN                      NRF_GPIO_PIN_MAP(0, 5)                      // P0.05
 
+const int ROOM_NUMBER =                 6;
+const int BED_NUMBER  =                 9;
+
 
 BLE_NUS_DEF(m_nus, NRF_SDH_BLE_TOTAL_LINK_COUNT);                                   /**< BLE NUS service instance. */
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
@@ -358,12 +361,29 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 }
 
 
+// Whether a button was pressed during time the device wasn't connected
+bool PENDING_BUTTON_NOTIFICATION = false;
+static void send_button_notification() {
+  if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
+    uint32_t err_code;
+    const int message[2] = {ROOM_NUMBER, BED_NUMBER};
+    uint16_t length = sizeof(message);
+    err_code = ble_nus_data_send(&m_nus, (uint8_t*)message, &length, m_conn_handle);
+    if (err_code != NRF_SUCCESS)
+    {
+        printf("Error sending data! 0x%x\r\n", err_code);
+        NRF_LOG_ERROR("Failed to send message over BLE. Error: 0x%x", err_code);
+    } else {
+      PENDING_BUTTON_NOTIFICATION = false;
+    }
+  }
+}
+
 /**@brief Function for handling BLE events.
  *
  * @param[in]   p_ble_evt   Bluetooth stack event.
  * @param[in]   p_context   Unused.
  */
-bool DEVICE_CONNECTED = false;
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     uint32_t err_code;
@@ -373,7 +393,6 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_CONNECTED:
             printf("\r\nConnected\r\n");
             NRF_LOG_INFO("Connected");
-            DEVICE_CONNECTED = true;
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
@@ -384,7 +403,6 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_DISCONNECTED:
             printf("\r\nDisconnected\r\n");
             NRF_LOG_INFO("Disconnected");
-            DEVICE_CONNECTED = false;
             // LED indication will be changed when advertising starts.
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
             break;
@@ -524,26 +542,6 @@ void bsp_event_handler(bsp_event_t event)
             break;
     }
 }
-
-//void bsp_event_handler(bsp_event_t event)
-//{
-//    uint32_t err_code;
-//    switch (event)
-//    {
-//        case BSP_EVENT_KEY_0:  // Button press event
-//            const char message[] = "Button Pressed!";
-//            uint16_t length = sizeof(message);
-//            err_code = ble_nus_data_send(&m_nus, (uint8_t*)message, &length, m_conn_handle);
-//            if (err_code != NRF_SUCCESS)
-//            {
-//                NRF_LOG_ERROR("Failed to send message over BLE. Error: 0x%x", err_code);
-//            }
-//            break;
-
-//        default:
-//            break;
-//    }
-//}
 
 
 /**@brief   Function for handling app_uart events.
@@ -766,46 +764,35 @@ int main(void)
           pressed = true;
         }
 
-        if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
-          printf("Device connected!\r\n");
-
-          if (last_pressed) {
-              printf("Last pressed true!\r\n");
+        if (pressed && !last_pressed) {
+          printf("Button just pressed!\r\n");
+          if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
+            // Connected to the device, sending notification
+            printf("Connection found, sending notification!\r\n");
+            send_button_notification();
           } else {
-              printf("Last pressed false!\r\n");
+            // Not connected to the device, queueing notification for next connection
+            PENDING_BUTTON_NOTIFICATION = true;
+            printf("No connection, queued button press for next connection!\r\n");
           }
-
-          if (pressed && !last_pressed) {
-              printf("Button just pressed!\r\n");
-              uint32_t err_code;
-              const char message[] = "Button Pressed!";
-              uint16_t length = sizeof(message);
-              err_code = ble_nus_data_send(&m_nus, (uint8_t*)message, &length, m_conn_handle);
-              if (err_code != NRF_SUCCESS)
-              {
-                  printf("Error sending data! 0x%x\r\n", err_code);
-                  NRF_LOG_ERROR("Failed to send message over BLE. Error: 0x%x", err_code);
-              }
-          } else if (!pressed && last_pressed) {
-            // Not pressed?
-            printf("Button just released!\r\n");
-          }
-          //NRF_LOG_INFO("Device not connected!");
-        } else {
-          printf("\r\nDevice not connected!\r\n");
-          NRF_LOG_INFO("Device not connected!");
+        } else if (!pressed && last_pressed) {
+          // Not pressed?
+          printf("Button just released!\r\n");
         }
 
-        //char str[1];
-        //intToStr(cur_button_value, str);
-
-        if (pressed) {
-          printf("Button pressed!\r\n");
-        } else {
-          printf("Button not pressed!\r\n");
-        }
+        //if (pressed) {
+        //  printf("Button pressed!\r\n");
+        //} else {
+        //  printf("Button not pressed!\r\n");
+        //}
         
-        nrf_delay_ms(1000);  // Debounce delay
+        // Sending queued notification
+        if (m_conn_handle != BLE_CONN_HANDLE_INVALID && PENDING_BUTTON_NOTIFICATION) {
+          printf("Sending queued notification!\r\n");
+          send_button_notification();
+        }
+
+        nrf_delay_ms(125);  // Debounce delay
         last_pressed = pressed;
         idle_state_handle();
     }
