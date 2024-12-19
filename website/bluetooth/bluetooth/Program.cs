@@ -93,9 +93,21 @@ public static class BluetoothConnection
                             var data = e.Value;
                             if (data == null)
                                 return;
+                            if (data.Length != 8)
+                            {
+                                Console.WriteLine($"Received invalid data from device {device.Id}! Discarding...");
+                                Console.WriteLine($"    Received data: {BitConverter.ToString(data)}");
+                                return;
+                            }
+                            
+                            //Array.Reverse(data);
+                            var room = BitConverter.ToInt32(data, 0);
+                            var bed = BitConverter.ToInt32(data, 4);
                             
                             Console.WriteLine($"Received data from {device.Name}|{device.Id}: {BitConverter.ToString(data)}");
-                            AddRequestToDatabase(databasePath, 123, -123);
+                            Console.WriteLine($"    Room number: {room}");
+                            Console.WriteLine($"    Bed number: {bed}");
+                            AddRequestToDatabase(databasePath, room, bed);
                         };
                         connectedDevices.Add(device, gattChar);
                     }
