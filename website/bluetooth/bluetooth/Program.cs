@@ -51,8 +51,6 @@ public static class BluetoothConnection
         {
             databasePath = args[1]; // args[0] is executable path
         }
-        
-        AddRequestToDatabase(databasePath, 3, 1);
 
         while (true)
         {
