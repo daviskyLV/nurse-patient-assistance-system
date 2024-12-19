@@ -6,7 +6,7 @@ import { connectToDatabase } from "../../db-connection"
 import { redirect } from 'next/navigation';
 import { encryptPassword } from "@/app/utils/encryption";
 
-export type signupState = {
+export type SignupState = {
     zodErrors: any,
     message: string
 }
@@ -30,8 +30,8 @@ const inputValidator = z.object({
     }),
 })
 
-export async function registerUserAction(prevState: signupState, formData: FormData) {
-    const newState: signupState = {
+export async function registerUserAction(prevState: SignupState, formData: FormData) {
+    const newState: SignupState = {
         zodErrors: null,
         message: ""
     }
@@ -81,5 +81,5 @@ export async function registerUserAction(prevState: signupState, formData: FormD
     )
     dbCon.close()
 
-    redirect("/login"); // Going to login page
+    redirect("/"); // Going to login page
 }

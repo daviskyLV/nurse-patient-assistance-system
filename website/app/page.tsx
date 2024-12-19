@@ -48,8 +48,6 @@ const TableViewPage: React.FC<{session: SessionPayload}> = async ({session}) => 
             initialNotifs.push(notif)
         }
     }
-
-    //initialNotifs = [...initialNotifs, ...defaultNotifs]
     
     // Getting nurse info
     const userInfo = await db.userInfoAsync(session.username)

@@ -84,7 +84,7 @@ public static class BluetoothConnection
                         
                         Console.WriteLine($"Device {device.Id} has notify property! Subscribing...");
                         await gattChar.StartNotificationsAsync();
-                        
+
                         // Handling received messages
                         gattChar.CharacteristicValueChanged += (s, e) =>
                         {
@@ -97,11 +97,11 @@ public static class BluetoothConnection
                                 Console.WriteLine($"    Received data: {BitConverter.ToString(data)}");
                                 return;
                             }
-                            
+
                             //Array.Reverse(data);
                             var room = BitConverter.ToInt32(data, 0);
                             var bed = BitConverter.ToInt32(data, 4);
-                            
+
                             Console.WriteLine($"Received data from {device.Name}|{device.Id}: {BitConverter.ToString(data)}");
                             Console.WriteLine($"    Room number: {room}");
                             Console.WriteLine($"    Bed number: {bed}");

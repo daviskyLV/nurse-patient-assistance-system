@@ -371,8 +371,8 @@ static void send_button_notification() {
     err_code = ble_nus_data_send(&m_nus, (uint8_t*)message, &length, m_conn_handle);
     if (err_code != NRF_SUCCESS)
     {
-        printf("Error sending data! 0x%x\r\n", err_code);
-        NRF_LOG_ERROR("Failed to send message over BLE. Error: 0x%x", err_code);
+      printf("Error sending data! 0x%x\r\n", err_code);
+      NRF_LOG_ERROR("Failed to send message over BLE. Error: 0x%x", err_code);
     } else {
       PENDING_BUTTON_NOTIFICATION = false;
     }
@@ -734,7 +734,6 @@ int main(void)
     uart_init();
     log_init();
     timers_init();
-    //buttons_leds_init(&erase_bonds);
     power_management_init();
     ble_stack_init();
     gap_params_init();
@@ -758,43 +757,37 @@ int main(void)
 
     for (;;)
     {
-        cur_button_value = nrf_gpio_pin_read(BUTTON_PIN);
-        bool pressed = false;
-        if (!cur_button_value) {
-          pressed = true;
-        }
+      cur_button_value = nrf_gpio_pin_read(BUTTON_PIN);
+      bool pressed = false;
+      if (!cur_button_value) {
+        pressed = true;
+      }
 
-        if (pressed && !last_pressed) {
-          printf("Button just pressed!\r\n");
-          if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
-            // Connected to the device, sending notification
-            printf("Connection found, sending notification!\r\n");
-            send_button_notification();
-          } else {
-            // Not connected to the device, queueing notification for next connection
-            PENDING_BUTTON_NOTIFICATION = true;
-            printf("No connection, queued button press for next connection!\r\n");
-          }
-        } else if (!pressed && last_pressed) {
-          // Not pressed?
-          printf("Button just released!\r\n");
-        }
-
-        //if (pressed) {
-        //  printf("Button pressed!\r\n");
-        //} else {
-        //  printf("Button not pressed!\r\n");
-        //}
-        
-        // Sending queued notification
-        if (m_conn_handle != BLE_CONN_HANDLE_INVALID && PENDING_BUTTON_NOTIFICATION) {
-          printf("Sending queued notification!\r\n");
+      if (pressed && !last_pressed) {
+        printf("Button just pressed!\r\n");
+        if (m_conn_handle != BLE_CONN_HANDLE_INVALID) {
+          // Connected to the device, sending notification
+          printf("Connection found, sending notification!\r\n");
           send_button_notification();
+        } else {
+          // Not connected to the device, queueing notification for next connection
+          PENDING_BUTTON_NOTIFICATION = true;
+          printf("No connection, queued button press for next connection!\r\n");
         }
+      } else if (!pressed && last_pressed) {
+        // Not pressed?
+        printf("Button just released!\r\n");
+      }
 
-        nrf_delay_ms(125);  // Debounce delay
-        last_pressed = pressed;
-        idle_state_handle();
+      // Sending queued notification
+      if (m_conn_handle != BLE_CONN_HANDLE_INVALID && PENDING_BUTTON_NOTIFICATION) {
+        printf("Sending queued notification!\r\n");
+        send_button_notification();
+      }
+
+      nrf_delay_ms(125);  // Debounce delay
+      last_pressed = pressed;
+      idle_state_handle();
     }
 }
 

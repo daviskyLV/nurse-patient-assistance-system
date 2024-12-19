@@ -55,9 +55,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="786" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="751" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="349" useTextEdit="1" openedFrom="C:/Users/andrejs/Documents/School/BachProj/nurse-patient-assistance-system/iot/ble_app_uartTEST/main.c" useBinaryEdit="0" left="0" path="../../../../../../nRF5_SDK_17.0.2/components/ble/ble_services/ble_nus/ble_nus.c" selected="0" top="312" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="367" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="343" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="313" useTextEdit="1" openedFrom="C:/Users/andrejs/Documents/School/BachProj/nurse-patient-assistance-system/iot/ble_app_uartTEST/main.c" useBinaryEdit="0" left="0" path="../../../../../../nRF5_SDK_17.0.2/components/ble/ble_services/ble_nus/ble_nus.c" selected="0" top="312" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="635" useTextEdit="1" openedFrom="C:/Users/andrejs/Documents/School/BachProj/nRF5_SDK_17.0.2/components/ble/ble_services/ble_nus/ble_nus.c" useBinaryEdit="0" left="0" path="../../../../../../nRF5_SDK_17.0.2/components/softdevice/s112/headers/ble_gatts.h" selected="0" top="601" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="ble_app_uart_pca10040e_s112" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
+ <ARMCrossStudioWindow activeProject="ble_app_uart_pca10040e_s112" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

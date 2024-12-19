@@ -1,11 +1,11 @@
 "use client";
-import { registerUserAction, signupState } from '@/app/api/actions/auth/signup';
+import { registerUserAction, SignupState } from '@/app/api/actions/auth/signup';
 import { ZodErrors } from '@/app/utils/components/ZodErrors';
 import React from 'react'
 import { useFormState, useFormStatus } from 'react-dom';
 import '../auth-styles.css';
 
-const INITIAL_STATE: signupState = {
+const INITIAL_STATE: SignupState = {
     zodErrors: null,
     message: ""
 }
