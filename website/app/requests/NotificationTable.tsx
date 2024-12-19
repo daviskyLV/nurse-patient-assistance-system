@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import AttendButton from './AttendButton';
-import CSVButton from './CSVButton'; 
-import LogoutButton from './LogoutButton';
+import AttendButton from './buttons/AttendButton';
+import CSVButton from './buttons/CSVButton'; 
+import LogoutButton from './buttons/LogoutButton';
 
 export type Notification = {
     reqNo: number;
@@ -28,7 +28,7 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
     const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
 
     const handleAttend = (reqNo: number, attendanceDate: string, attendanceTime: string, nurseName: string) => {
-        // updating table
+        // updating the modified row
         setNotifications((prevNotifications) => 
             prevNotifications.map((notification) =>
                 notification.reqNo === reqNo
@@ -42,6 +42,8 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
             )
         );
     };
+
+    
 
     return (
         <div className="notification-table-container">
