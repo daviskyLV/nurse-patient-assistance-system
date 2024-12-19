@@ -5,21 +5,27 @@ public static class BluetoothConnection
 {
     private const string DeviceName = "Notest_UART";
 
-    private static async Task AddRequestToDatabase(string dbPath, int room, int bed)
+    private static void AddRequestToDatabase(string dbPath, int room, int bed)
     {
-        await using (var connection = new SqliteConnection($"Data Source={dbPath};Version=3;"))
+        using (var connection = new SqliteConnection($"Data Source={dbPath};"))
         {
             connection.Open();
             
             // Insert the request
-            const string insertQuery = "INSERT INTO NurseRequests (room_number, bed_number) VALUES (@r, @b);";
-            await using (var insertCmd = new SqliteCommand(insertQuery, connection))
+            const string insertQuery = """
+                                       INSERT INTO NurseRequests (room_number, bed_number, request_timestamp)
+                                       VALUES (@r, @b, @t);
+                                       """;
+            using (var insertCmd = new SqliteCommand(insertQuery, connection))
             {
                 insertCmd.Parameters.AddWithValue("@r", room);
                 insertCmd.Parameters.AddWithValue("@b", bed);
+                insertCmd.Parameters.AddWithValue("@t", DateTimeOffset.Now.ToUnixTimeSeconds());
 
                 insertCmd.ExecuteNonQuery();
             }
+            
+            connection.Close();
         }
     }
     
@@ -40,11 +46,13 @@ public static class BluetoothConnection
     private static async Task Main(string[] args)
     {
 
-        var databasePath = "database.db";
+        var databasePath = @"C:\Users\andrejs\Documents\School\BachProj\nurse-patient-assistance-system\website\database.db";
         if (args.Length > 1)
         {
             databasePath = args[1]; // args[0] is executable path
         }
+        
+        AddRequestToDatabase(databasePath, 3, 1);
 
         while (true)
         {
